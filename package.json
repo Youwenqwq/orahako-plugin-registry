@@ -1,0 +1,22 @@
+{
+  "name": "orahako-plugin-registry",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Curated release metadata for the official Orahako plugins",
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@12.14.0",
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "validate": "node scripts/validate-artifacts.mjs",
+    "sync:website": "node scripts/sync-website.mjs",
+    "sync:website:check": "node scripts/sync-website.mjs --check"
+  },
+  "dependencies": {
+    "fflate": "^0.8.3",
+    "semver": "^7.8.2"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "bundles": [
+    {
+      "id": "ysu.essentials",
+      "name": "燕大常用功能",
+      "schoolId": "ysu",
+      "pluginIds": [
+        "orahako.overview",
+        "orahako.schedule",
+        "orahako.grades",
+        "orahako.exams",
+        "orahako.student-info",
+        "orahako.skbird"
+      ]
+    },
+    {
+      "id": "zmu.essentials",
+      "name": "遵医常用功能",
+      "schoolId": "zmu",
+      "pluginIds": [
+        "orahako.overview",
+        "orahako.schedule",
+        "orahako.grades",
+        "orahako.exams",
+        "orahako.student-info",
+        "orahako.skbird"
+      ]
+    }
+  ]
+}

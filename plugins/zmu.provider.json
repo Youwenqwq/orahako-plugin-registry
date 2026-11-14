@@ -1,0 +1,25 @@
+{
+  "id": "zmu.provider",
+  "name": "遵义医科大学教务",
+  "summary": "验证码登录、学籍、课表、成绩与考试查询。",
+  "author": "Orahako",
+  "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/zmu-provider",
+  "categories": ["provider", "school"],
+  "repository": "Youwenqwq/orahako-official-plugins",
+  "sourcePath": "plugins/zmu-provider",
+  "trust": "official",
+  "order": 4,
+  "versions": [
+    {
+      "version": "1.0.0",
+      "apiVersion": 1,
+      "minAppVersion": "0.15.0",
+      "platforms": ["web", "android"],
+      "zipUrl": "/plugins/zmu.provider/1.0.0.zip",
+      "sha256": "2e306b0fe5f80e852b22796345a34a650533409b3078853a40e415688bf0dad0",
+      "size": 7003,
+      "publishedAt": "2026-11-13T12:53:43Z",
+      "changelog": "首个乘方教务 Provider。"
+    }
+  ]
+}
