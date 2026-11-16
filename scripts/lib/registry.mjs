@@ -12,10 +12,13 @@ import {
   TRUST,
   isHttpsUrl,
   isIsoTimestamp,
+  isNativeCapabilityId,
   isNonEmptyString,
   isPlainObject,
   isPositiveInteger,
   isSafePackagePath,
+  validatePluginDependencies,
+  validateServiceNameList,
 } from "./rules.mjs"
 import { validatePublicIndex } from "./schema.mjs"
 
@@ -43,6 +46,10 @@ const RELEASE_FIELDS = new Set([
   "version",
   "apiVersion",
   "minAppVersion",
+  "nativeCapabilities",
+  "inject",
+  "provides",
+  "requires",
   "platforms",
   "zipUrl",
   "sha256",
@@ -253,7 +260,7 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
   if (!isNonEmptyString(version) || !semver.valid(version)) {
     issues.push(`${where}: version must be a valid SemVer`)
   }
-  if (raw.apiVersion !== 1) issues.push(`${where}: apiVersion must be 1`)
+  if (raw.apiVersion !== 2) issues.push(`${where}: apiVersion must be 2`)
 
   let minAppVersion
   if (raw.minAppVersion !== undefined) {
@@ -262,6 +269,45 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
     } else {
       minAppVersion = raw.minAppVersion
     }
+  }
+
+  let nativeCapabilities
+  if (raw.nativeCapabilities !== undefined) {
+    if (!Array.isArray(raw.nativeCapabilities) || raw.nativeCapabilities.length === 0) {
+      issues.push(`${where}: nativeCapabilities must be a non-empty array when present`)
+    } else {
+      const seen = new Set()
+      let valid = true
+      for (const capability of raw.nativeCapabilities) {
+        if (!isNativeCapabilityId(capability)) {
+          issues.push(
+            `${where}: nativeCapabilities must contain versioned capability ids such as native.geolocation@1`
+          )
+          valid = false
+        } else if (seen.has(capability)) {
+          issues.push(`${where}: duplicate native capability "${capability}"`)
+          valid = false
+        } else {
+          seen.add(capability)
+        }
+      }
+      if (valid) nativeCapabilities = [...raw.nativeCapabilities]
+    }
+  }
+
+  let inject
+  if (raw.inject !== undefined) {
+    inject = validateServiceNameList(raw.inject, "inject", where, issues)
+  }
+
+  let provides
+  if (raw.provides !== undefined) {
+    provides = validateServiceNameList(raw.provides, "provides", where, issues)
+  }
+
+  let requires
+  if (raw.requires !== undefined) {
+    requires = validatePluginDependencies(raw.requires, pluginId, where, issues)
   }
 
   let platforms
@@ -332,8 +378,12 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
 
   return {
     version,
-    apiVersion: 1,
+    apiVersion: 2,
     ...(minAppVersion !== undefined ? { minAppVersion } : {}),
+    ...(nativeCapabilities !== undefined ? { nativeCapabilities } : {}),
+    ...(inject !== undefined ? { inject } : {}),
+    ...(provides !== undefined ? { provides } : {}),
+    ...(requires !== undefined ? { requires } : {}),
     platforms,
     zipUrl,
     sha256,

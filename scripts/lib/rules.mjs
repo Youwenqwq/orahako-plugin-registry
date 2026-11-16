@@ -1,3 +1,5 @@
+import semver from "semver"
+
 /**
  * Shared schema constants and predicates for the Orahako plugin registry.
  *
@@ -16,6 +18,12 @@ export const PLUGIN_ID_PATTERN = /^[a-z0-9][a-z0-9-]*(?:\.[a-z0-9][a-z0-9-]*)*$/
 export const ISO_TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
 export const SHA256_PATTERN = /^[a-f0-9]{64}$/
 export const ROOT_RELATIVE_ZIP_URL_PATTERN = /^\/plugins\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+\.zip$/
+/**
+ * Versioned runtime capability references such as `native.geolocation@1`.
+ * The id uses lowercase DNS-like labels; the version is a positive integer.
+ * Mirrors the `id@version` references accepted by `lib/native/native-plugin.ts`.
+ */
+export const NATIVE_CAPABILITY_PATTERN = /^[a-z][a-z0-9-]*(?:\.[a-z0-9][a-z0-9-]*)*@[1-9][0-9]*$/
 
 const MAX_PACKAGE_PATH_LENGTH = 255
 const SAFE_SEGMENT = /^[A-Za-z0-9._-]+$/
@@ -31,6 +39,67 @@ export class RegistryError extends Error {
 
 export function isPlainObject(value) {
   return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+/** A capability reference is a dotted id followed by `@<positive integer>`. */
+export function isNativeCapabilityId(value) {
+  return typeof value === "string" && NATIVE_CAPABILITY_PATTERN.test(value)
+}
+
+/**
+ * Validate an optional root-service list (`inject` or `provides`).
+ *
+ * Returns a copy of the list when every entry is a unique non-empty service
+ * name; otherwise records issues and returns `undefined`.
+ */
+export function validateServiceNameList(value, field, where, issues) {
+  if (!Array.isArray(value) || value.length === 0) {
+    issues.push(`${where}: ${field} must be a non-empty array when present`)
+    return undefined
+  }
+  const seen = new Set()
+  let valid = true
+  for (const name of value) {
+    if (!isNonEmptyString(name)) {
+      issues.push(`${where}: ${field} must contain non-empty service names`)
+      valid = false
+    } else if (seen.has(name)) {
+      issues.push(`${where}: duplicate ${field} service "${name}"`)
+      valid = false
+    } else {
+      seen.add(name)
+    }
+  }
+  return valid ? [...value] : undefined
+}
+
+/**
+ * Validate an optional `requires` map of plugin IDs to SemVer ranges.
+ *
+ * Returns a copy of the map when every key is a plugin ID other than the
+ * release's own plugin and every value is a valid SemVer range; otherwise
+ * records issues and returns `undefined`.
+ */
+export function validatePluginDependencies(value, pluginId, where, issues) {
+  if (!isPlainObject(value) || Object.keys(value).length === 0) {
+    issues.push(`${where}: requires must be a non-empty object when present`)
+    return undefined
+  }
+  let valid = true
+  for (const [id, range] of Object.entries(value)) {
+    if (!PLUGIN_ID_PATTERN.test(id)) {
+      issues.push(`${where}: requires keys must be plugin IDs`)
+      valid = false
+    } else if (id === pluginId) {
+      issues.push(`${where}: plugin must not require itself`)
+      valid = false
+    }
+    if (!isNonEmptyString(range) || semver.validRange(range) === null) {
+      issues.push(`${where}: requires["${id}"] must be a valid SemVer range`)
+      valid = false
+    }
+  }
+  return valid ? { ...value } : undefined
 }
 
 export function isNonEmptyString(value) {

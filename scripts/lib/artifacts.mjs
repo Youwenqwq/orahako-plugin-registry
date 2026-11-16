@@ -12,8 +12,9 @@ const MAX_MANIFEST_BYTES = 64 * 1024
  * Verify a downloaded plugin archive against its curated release metadata.
  *
  * Mirrors the client installer checks: exact size and SHA-256, safe archive
- * paths, no duplicates, manifest id/version/apiVersion/minAppVersion, and the
- * declared entry, styles and icon files.
+ * paths, no duplicates, manifest id/version/apiVersion/minAppVersion, the
+ * declared entry, styles and icon files, and dependency metadata
+ * (`inject`/`provides`/`requires`/`nativeCapabilities`) matching the manifest.
  */
 export function verifyArchive(bytes, plugin, release) {
   const label = `${plugin.id}@${release.version}`
@@ -143,6 +144,11 @@ function verifyManifest(manifest, plugin, release, files, label) {
     )
   }
 
+  verifyMetadataList(manifest, release, "inject", label)
+  verifyMetadataList(manifest, release, "provides", label)
+  verifyRequires(manifest, release, label)
+  verifyMetadataList(manifest, release, "nativeCapabilities", label)
+
   requireManifestFile(manifest, "entry", files, label)
 
   if (manifest.styles !== undefined) {
@@ -161,5 +167,53 @@ function verifyManifest(manifest, plugin, release, files, label) {
 
   if (manifest.icon !== undefined) {
     requireManifestFile(manifest, "icon", files, label)
+  }
+}
+
+/**
+ * Assert that a manifest string list (`inject`, `provides`,
+ * `nativeCapabilities`) declares exactly the registry's entries.
+ *
+ * Order is not significant: the client resolves services and capabilities by
+ * name, so only the set of declared entries is compared.
+ */
+function verifyMetadataList(manifest, release, field, label) {
+  const declared = manifest[field]
+  if (declared !== undefined) {
+    if (
+      !Array.isArray(declared) ||
+      declared.some((entry) => !isNonEmptyString(entry))
+    ) {
+      throw new Error(`${label}: manifest ${field} must be an array of non-empty strings`)
+    }
+  }
+  const actual = [...(declared ?? [])].sort()
+  const expected = [...(release[field] ?? [])].sort()
+  if (actual.length !== expected.length || actual.some((entry, index) => entry !== expected[index])) {
+    throw new Error(
+      `${label}: manifest ${field} ${JSON.stringify(declared ?? [])} does not match registry ${JSON.stringify(release[field] ?? [])}`
+    )
+  }
+}
+
+/** Assert that the manifest `requires` map matches the registry exactly. */
+function verifyRequires(manifest, release, label) {
+  const declared = manifest.requires
+  if (
+    declared !== undefined &&
+    (!isPlainObject(declared) ||
+      Object.values(declared).some((range) => !isNonEmptyString(range)))
+  ) {
+    throw new Error(`${label}: manifest requires must map plugin IDs to SemVer ranges`)
+  }
+  const actual = declared ?? {}
+  const expected = release.requires ?? {}
+  const ids = new Set([...Object.keys(actual), ...Object.keys(expected)])
+  for (const id of ids) {
+    if (actual[id] !== expected[id]) {
+      throw new Error(
+        `${label}: manifest requires ${JSON.stringify(actual)} does not match registry ${JSON.stringify(expected)}`
+      )
+    }
   }
 }

@@ -12,12 +12,13 @@
   "versions": [
     {
       "version": "1.0.1",
-      "apiVersion": 1,
-      "minAppVersion": "0.15.0",
+      "apiVersion": 2,
+      "minAppVersion": "0.16.0",
+      "inject": ["ui"],
       "platforms": ["web", "android"],
       "zipUrl": "/plugins/community.theme.arknights/1.0.1.zip",
-      "sha256": "150b3d7f21dcbf9a4599141c987281c3ff7fe4e29cb324abdf1b29f1c8658e7c",
-      "size": 7175,
+      "sha256": "0ee5f6250caf671998d94e7a0da491bb8fa40c4441ecabab091dab2345a3d49e",
+      "size": 9378,
       "publishedAt": "2026-11-13T10:04:29Z",
       "changelog": "迁移至 Orahako 公共模块。"
     }

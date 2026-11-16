@@ -48,14 +48,44 @@ Release fields:
 | Field           | Notes                                                      |
 | --------------- | ---------------------------------------------------------- |
 | `version`       | SemVer published in the ZIP manifest                       |
-| `apiVersion`    | Plugin API version; must be `1`                            |
+| `apiVersion`    | Plugin API version; must be `2`                            |
 | `minAppVersion` | Optional minimum app SemVer                                |
+| `nativeCapabilities` | Optional unique versioned capability ids, e.g. `["native.geolocation@1"]` |
+| `inject`        | Optional unique root service names the release consumes    |
+| `provides`      | Optional unique root service names the release supplies    |
+| `requires`      | Optional map of plugin ids to required SemVer ranges       |
 | `platforms`     | Subset of `["web", "android"]`                             |
 | `zipUrl`        | Root-relative `/plugins/<id>/<version>.zip`                |
 | `sha256`        | Lowercase SHA-256 of the published ZIP                     |
 | `size`          | Exact ZIP byte size                                        |
 | `publishedAt`   | ISO-8601 UTC timestamp, e.g. `2026-11-14T22:34:25Z`        |
 | `changelog`     | Optional non-empty changelog                               |
+
+`nativeCapabilities` lists the versioned host capabilities a release needs, for
+example `native.geolocation@1` for Perlica or `native.files@1` for Skbird. Each
+entry is `<id>@<version>` with a lowercase dotted id and a positive integer
+version, entries must be unique, and the array is optional: omit it when the
+release needs no native capability. Curated values must match the release's ZIP
+manifest; the client only offers a release when the host declares every listed
+capability.
+
+`inject`, `provides` and `requires` mirror the manifest fields of the same
+names so the marketplace can resolve dependencies before downloading a release:
+
+- `inject` lists the root Cordis services the release needs, for example
+  `["ui", "i18n", "storage", "http", "native"]` for Perlica and Skbird,
+  `["ui", "assets"]` for YUNA, `["ui"]` for Arknights and
+  `["providers", "session", "query"]` for `zmu.provider`.
+- `provides` lists the root services the release registers for other plugins.
+- `requires` maps plugin ids to SemVer ranges, for example
+  `{ "orahako.shell": "^1.0.0" }`; a release must not require itself.
+
+All three are optional and must be omitted when empty. `inject` and `provides`
+entries are unique non-empty service names; `requires` keys are plugin ids and
+values are ranges accepted by `semver.validRange`. `scripts/validate-artifacts.mjs`
+compares these fields, plus `nativeCapabilities`, with the release's ZIP
+manifest and fails on any drift, so the index never advertises a service or
+package dependency the archive does not declare.
 
 Registry-internal fields (stripped from `dist/plugins.json` and the website
 snapshot):
@@ -91,7 +121,9 @@ official plugins are curated here.
 The public index keeps `zipUrl` values root-relative. The website serves the
 ZIPs under `/plugins/<id>/<version>.zip`, so `scripts/validate-artifacts.mjs`
 resolves them against <https://ysu.welain.com/updates/plugins.json> and verifies
-size, SHA-256, safe archive paths and the manifest before a change is merged.
+size, SHA-256, safe archive paths, the manifest and the declared
+`inject`/`provides`/`requires`/`nativeCapabilities` dependency metadata before a
+change is merged.
 
 ### Bundles
 

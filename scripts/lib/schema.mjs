@@ -8,10 +8,13 @@ import {
   SHA256_PATTERN,
   isHttpsUrl,
   isIsoTimestamp,
+  isNativeCapabilityId,
   isNonEmptyString,
   isPlainObject,
   isPositiveInteger,
   isSafePackagePath,
+  validatePluginDependencies,
+  validateServiceNameList,
 } from "./rules.mjs"
 
 const INDEX_FIELDS = new Set(["schemaVersion", "updatedAt", "plugins", "bundles"])
@@ -29,6 +32,10 @@ const RELEASE_FIELDS = new Set([
   "version",
   "apiVersion",
   "minAppVersion",
+  "nativeCapabilities",
+  "inject",
+  "provides",
+  "requires",
   "platforms",
   "zipUrl",
   "sha256",
@@ -137,9 +144,33 @@ function validateRelease(release, where, pluginId, versions, issues) {
   } else {
     versions.add(release.version)
   }
-  if (release.apiVersion !== 1) issues.push(`${where}: apiVersion must be 1`)
+  if (release.apiVersion !== 2) issues.push(`${where}: apiVersion must be 2`)
   if (release.minAppVersion !== undefined && !semver.valid(release.minAppVersion)) {
     issues.push(`${where}: minAppVersion must be a valid SemVer when present`)
+  }
+  if (release.nativeCapabilities !== undefined) {
+    if (
+      !Array.isArray(release.nativeCapabilities) ||
+      release.nativeCapabilities.length === 0
+    ) {
+      issues.push(`${where}: nativeCapabilities must be a non-empty array when present`)
+    } else if (
+      release.nativeCapabilities.some((capability) => !isNativeCapabilityId(capability)) ||
+      new Set(release.nativeCapabilities).size !== release.nativeCapabilities.length
+    ) {
+      issues.push(
+        `${where}: nativeCapabilities must be unique versioned capability ids such as native.geolocation@1`
+      )
+    }
+  }
+  if (release.inject !== undefined) {
+    validateServiceNameList(release.inject, "inject", where, issues)
+  }
+  if (release.provides !== undefined) {
+    validateServiceNameList(release.provides, "provides", where, issues)
+  }
+  if (release.requires !== undefined) {
+    validatePluginDependencies(release.requires, pluginId, where, issues)
   }
   if (!Array.isArray(release.platforms) || release.platforms.length === 0) {
     issues.push(`${where}: platforms must be a non-empty array`)
