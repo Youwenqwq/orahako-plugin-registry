@@ -18,10 +18,10 @@
       "inject": ["ui", "i18n", "http", "storage", "native"],
       "platforms": ["web", "android"],
       "zipUrl": "/plugins/orahako.skbird/1.2.0.zip",
-      "sha256": "c843841769e30168d25f7de2a7f7cecaffddea77737d20d0ae89d5f68a8516d0",
-      "size": 24952,
-      "publishedAt": "2026-11-15T00:44:03Z",
-      "changelog": "移动端设置入口移至顶栏，底部导航仅保留消息与我的；重构帖子列表与详情的移动端布局、分隔和图片展示。"
+      "sha256": "dd2f8a66303e5ed4527c807a7023b01336e59d7d297336bb76f6ce75d7678f55",
+      "size": 23508,
+      "publishedAt": "2026-11-16T13:17:32Z",
+      "changelog": "移动端设置入口移至顶栏，底部导航仅保留消息与我的；重构帖子列表与详情的移动端布局、分隔和图片展示。重新打包：修正插件工具类覆盖宿主响应式样式导致 PC 端显示移动端布局、以及主题变量覆盖宿主字体的问题。"
     }
   ]
 }
