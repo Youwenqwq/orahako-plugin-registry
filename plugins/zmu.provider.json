@@ -12,15 +12,15 @@
   "versions": [
     {
       "version": "1.0.0",
-      "apiVersion": 2,
+      "apiVersion": 1,
       "minAppVersion": "0.16.0",
       "inject": ["providers", "session", "query"],
       "platforms": ["web", "android"],
-      "zipUrl": "/plugins/zmu.provider/1.0.0.zip",
-      "sha256": "da56b9cacc89ae29d354ec3990bac871fba04b46dd890a8675896beab3ee7f69",
-      "size": 7717,
-      "publishedAt": "2026-11-13T12:53:43Z",
-      "changelog": "首个乘方教务 Provider。"
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/zmu.provider/1.0.0.zip",
+      "sha256": "daca07042918d796c40d8d58b92df9580340cf9a81b125a884d0c00988010477",
+      "size": 7877,
+      "publishedAt": "2026-11-24T02:35:00Z",
+      "changelog": "API v1 初始版本。"
     }
   ]
 }

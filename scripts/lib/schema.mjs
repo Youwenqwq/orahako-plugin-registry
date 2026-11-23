@@ -1,8 +1,8 @@
 import semver from "semver"
 import {
   PLATFORMS,
+  PLUGIN_API_VERSION,
   PLUGIN_ID_PATTERN,
-  ROOT_RELATIVE_ZIP_URL_PATTERN,
   RegistryError,
   SCHEMA_VERSION,
   SHA256_PATTERN,
@@ -13,6 +13,7 @@ import {
   isPlainObject,
   isPositiveInteger,
   isSafePackagePath,
+  expectedZipUrl,
   validatePluginDependencies,
   validateServiceNameList,
 } from "./rules.mjs"
@@ -144,7 +145,9 @@ function validateRelease(release, where, pluginId, versions, issues) {
   } else {
     versions.add(release.version)
   }
-  if (release.apiVersion !== 2) issues.push(`${where}: apiVersion must be 2`)
+  if (release.apiVersion !== PLUGIN_API_VERSION) {
+    issues.push(`${where}: apiVersion must be ${PLUGIN_API_VERSION}`)
+  }
   if (release.minAppVersion !== undefined && !semver.valid(release.minAppVersion)) {
     issues.push(`${where}: minAppVersion must be a valid SemVer when present`)
   }
@@ -180,11 +183,8 @@ function validateRelease(release, where, pluginId, versions, issues) {
   ) {
     issues.push(`${where}: platforms must be unique values from ${PLATFORMS.join(", ")}`)
   }
-  if (
-    !isNonEmptyString(release.zipUrl) ||
-    !ROOT_RELATIVE_ZIP_URL_PATTERN.test(release.zipUrl)
-  ) {
-    issues.push(`${where}: zipUrl must be a root-relative /plugins/<id>/<version>.zip path`)
+  if (!isNonEmptyString(release.zipUrl) || !isHttpsUrl(release.zipUrl)) {
+    issues.push(`${where}: zipUrl must be an absolute https URL`)
   }
   if (!isNonEmptyString(release.sha256) || !SHA256_PATTERN.test(release.sha256)) {
     issues.push(`${where}: sha256 must be a lowercase hex digest`)
@@ -200,7 +200,7 @@ function validateRelease(release, where, pluginId, versions, issues) {
   }
 
   if (isNonEmptyString(pluginId) && isNonEmptyString(release.version)) {
-    const expected = `/plugins/${pluginId}/${release.version}.zip`
+    const expected = expectedZipUrl(pluginId, release.version)
     if (release.zipUrl !== expected) issues.push(`${where}: zipUrl must be ${expected}`)
   }
 }

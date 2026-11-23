@@ -11,16 +11,16 @@
   "order": 2,
   "versions": [
     {
-      "version": "1.0.1",
-      "apiVersion": 2,
+      "version": "1.0.0",
+      "apiVersion": 1,
       "minAppVersion": "0.16.0",
       "inject": ["ui"],
       "platforms": ["web", "android"],
-      "zipUrl": "/plugins/community.theme.arknights/1.0.1.zip",
-      "sha256": "0ee5f6250caf671998d94e7a0da491bb8fa40c4441ecabab091dab2345a3d49e",
-      "size": 9378,
-      "publishedAt": "2026-11-13T10:04:29Z",
-      "changelog": "迁移至 Orahako 公共模块。"
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.arknights/1.0.0.zip",
+      "sha256": "db19e41dd248e60bd542d2290c8ba44921fa45ae89f938c9745071a3c00cad84",
+      "size": 8790,
+      "publishedAt": "2026-11-24T02:35:00Z",
+      "changelog": "API v1 初始版本。"
     }
   ]
 }

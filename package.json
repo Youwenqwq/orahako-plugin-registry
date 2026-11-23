@@ -11,9 +11,7 @@
   "packageManager": "pnpm@12.14.0",
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "validate": "node scripts/validate-artifacts.mjs",
-    "sync:website": "node scripts/sync-website.mjs",
-    "sync:website:check": "node scripts/sync-website.mjs --check"
+    "validate": "node scripts/validate-artifacts.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.3",

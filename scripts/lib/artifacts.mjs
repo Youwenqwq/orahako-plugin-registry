@@ -9,7 +9,7 @@ const MAX_FILES = 512
 const MAX_MANIFEST_BYTES = 64 * 1024
 
 /**
- * Verify a downloaded plugin archive against its curated release metadata.
+ * Verify a committed plugin archive against its curated release metadata.
  *
  * Mirrors the client installer checks: exact size and SHA-256, safe archive
  * paths, no duplicates, manifest id/version/apiVersion/minAppVersion, the

@@ -1,0 +1,203 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-24T02:35:00Z",
+  "plugins": [
+    {
+      "id": "community.theme.yuna",
+      "name": "YUNA 三皮肤主题",
+      "summary": "102 编辑海报、明日方舟工程终端、红魔馆典雅档案；三套均支持浅色、深色与跟随系统。",
+      "author": "QS-Ling",
+      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/theme-yuna",
+      "categories": [
+        "theme"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "inject": [
+            "ui",
+            "assets"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.0.0.zip",
+          "sha256": "0a5ff336be26a9c95cfb83636fdbb0560fbc08821cf6e9eb7711072c2a170b26",
+          "size": 88911,
+          "publishedAt": "2026-11-24T02:35:00Z",
+          "changelog": "API v1 初始版本。"
+        }
+      ]
+    },
+    {
+      "id": "community.theme.arknights",
+      "name": "明日方舟 × 新粗野主义",
+      "summary": "罗德岛终端视觉体系：石墨画布、2px 墨边、零圆角、硬偏移阴影、工程网格与青色信号。",
+      "author": "heshuoshuo0512 / Orahako",
+      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/theme-arknights",
+      "categories": [
+        "theme"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "inject": [
+            "ui"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.arknights/1.0.0.zip",
+          "sha256": "db19e41dd248e60bd542d2290c8ba44921fa45ae89f938c9745071a3c00cad84",
+          "size": 8790,
+          "publishedAt": "2026-11-24T02:35:00Z",
+          "changelog": "API v1 初始版本。"
+        }
+      ]
+    },
+    {
+      "id": "community.perlica-toybox",
+      "name": "Perlica 佩黎卡",
+      "summary": "地图找车、扫码或车辆号解锁、骑行控制、历史记录与账户管理。首个完整外部社区功能插件。credit: @TowelWang",
+      "author": "Youwenqwq / Orahako community",
+      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/perlica-toybox",
+      "categories": [
+        "toybox",
+        "transport"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "nativeCapabilities": [
+            "native.geolocation@1"
+          ],
+          "inject": [
+            "ui",
+            "slots",
+            "settings",
+            "router",
+            "i18n",
+            "storage",
+            "http",
+            "native"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.perlica-toybox/1.0.0.zip",
+          "sha256": "e1642cc4b446c74abffc307614b372a9a147eeed7eec6d4eee93338bd9409c2d",
+          "size": 215563,
+          "publishedAt": "2026-11-24T02:35:00Z",
+          "changelog": "API v1 初始版本。"
+        }
+      ]
+    },
+    {
+      "id": "zmu.provider",
+      "name": "遵义医科大学教务",
+      "summary": "验证码登录、学籍、课表、成绩与考试查询。",
+      "author": "Orahako",
+      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/zmu-provider",
+      "categories": [
+        "provider",
+        "school"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "inject": [
+            "providers",
+            "session",
+            "query"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/zmu.provider/1.0.0.zip",
+          "sha256": "daca07042918d796c40d8d58b92df9580340cf9a81b125a884d0c00988010477",
+          "size": 7877,
+          "publishedAt": "2026-11-24T02:35:00Z",
+          "changelog": "API v1 初始版本。"
+        }
+      ]
+    },
+    {
+      "id": "orahako.skbird",
+      "name": "森空鸟",
+      "summary": "热榜、帖子、消息与个人账户。",
+      "author": "Orahako",
+      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/skbird",
+      "categories": [
+        "toybox"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "nativeCapabilities": [
+            "native.files@1"
+          ],
+          "inject": [
+            "ui",
+            "slots",
+            "router",
+            "i18n",
+            "http",
+            "storage",
+            "native"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/orahako.skbird/1.0.0.zip",
+          "sha256": "95f7eaaf562daf9d213833be23d2c9598cd5bd7cdf2a4804135160ef7d02df49",
+          "size": 22938,
+          "publishedAt": "2026-11-24T02:35:00Z",
+          "changelog": "API v1 初始版本。"
+        }
+      ]
+    }
+  ],
+  "bundles": [
+    {
+      "id": "ysu.essentials",
+      "name": "燕大常用功能",
+      "schoolId": "ysu",
+      "pluginIds": [
+        "orahako.overview",
+        "orahako.schedule",
+        "orahako.grades",
+        "orahako.exams",
+        "orahako.student-info",
+        "orahako.skbird"
+      ]
+    },
+    {
+      "id": "zmu.essentials",
+      "name": "遵医常用功能",
+      "schoolId": "zmu",
+      "pluginIds": [
+        "orahako.overview",
+        "orahako.schedule",
+        "orahako.grades",
+        "orahako.exams",
+        "orahako.student-info",
+        "orahako.skbird"
+      ]
+    }
+  ]
+}

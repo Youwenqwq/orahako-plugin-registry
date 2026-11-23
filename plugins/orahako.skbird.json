@@ -11,17 +11,17 @@
   "order": 5,
   "versions": [
     {
-      "version": "1.2.0",
-      "apiVersion": 2,
+      "version": "1.0.0",
+      "apiVersion": 1,
       "minAppVersion": "0.16.0",
       "nativeCapabilities": ["native.files@1"],
-      "inject": ["ui", "i18n", "http", "storage", "native"],
+      "inject": ["ui", "slots", "router", "i18n", "http", "storage", "native"],
       "platforms": ["web", "android"],
-      "zipUrl": "/plugins/orahako.skbird/1.2.0.zip",
-      "sha256": "dd2f8a66303e5ed4527c807a7023b01336e59d7d297336bb76f6ce75d7678f55",
-      "size": 23508,
-      "publishedAt": "2026-11-16T13:17:32Z",
-      "changelog": "移动端设置入口移至顶栏，底部导航仅保留消息与我的；重构帖子列表与详情的移动端布局、分隔和图片展示。重新打包：修正插件工具类覆盖宿主响应式样式导致 PC 端显示移动端布局、以及主题变量覆盖宿主字体的问题。"
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/orahako.skbird/1.0.0.zip",
+      "sha256": "95f7eaaf562daf9d213833be23d2c9598cd5bd7cdf2a4804135160ef7d02df49",
+      "size": 22938,
+      "publishedAt": "2026-11-24T02:35:00Z",
+      "changelog": "API v1 初始版本。"
     }
   ]
 }

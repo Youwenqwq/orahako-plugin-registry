@@ -3,21 +3,31 @@ import semver from "semver"
 /**
  * Shared schema constants and predicates for the Orahako plugin registry.
  *
- * The public index shape mirrors `packages/plugin-sdk/market.ts` in
- * Youwenqwq/ysu-client. Package path rules mirror
- * `lib/plugins/package-path.ts` so archives accepted here are also accepted
- * by the client installer.
+ * The public index shape mirrors `packages/core/sdk/src/market.ts` in
+ * Youwenqwq/ysu-client. Package path rules mirror the client kernel so
+ * archives accepted here are also accepted by the installer.
  */
 
 export const SCHEMA_VERSION = 1
+export const PLUGIN_API_VERSION = 1
 export const REPOSITORY = "Youwenqwq/orahako-official-plugins"
 export const TRUST = "official"
 export const PLATFORMS = ["web", "android"]
+export const DISTRIBUTION_BASE_URL =
+  "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist"
+export const MARKET_INDEX_URL = `${DISTRIBUTION_BASE_URL}/plugins.json`
 
 export const PLUGIN_ID_PATTERN = /^[a-z0-9][a-z0-9-]*(?:\.[a-z0-9][a-z0-9-]*)*$/
 export const ISO_TIMESTAMP_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
 export const SHA256_PATTERN = /^[a-f0-9]{64}$/
-export const ROOT_RELATIVE_ZIP_URL_PATTERN = /^\/plugins\/[A-Za-z0-9._-]+\/[A-Za-z0-9._-]+\.zip$/
+
+export function releaseArtifactPath(pluginId, version) {
+  return `plugins/${pluginId}/${version}.zip`
+}
+
+export function expectedZipUrl(pluginId, version) {
+  return `${DISTRIBUTION_BASE_URL}/${releaseArtifactPath(pluginId, version)}`
+}
 /**
  * Versioned runtime capability references such as `native.geolocation@1`.
  * The id uses lowercase DNS-like labels; the version is a positive integer.

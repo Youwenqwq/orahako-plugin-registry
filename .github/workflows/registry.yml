@@ -30,10 +30,12 @@ jobs:
       - name: Install pnpm dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Generate plugin index
-        run: pnpm run generate
+      - name: Verify generated plugin index is committed
+        run: |
+          pnpm run generate
+          git diff --exit-code -- dist/plugins.json
 
-      - name: Validate published artifacts
+      - name: Validate committed artifacts
         run: pnpm run validate
 
       - name: Upload plugin index

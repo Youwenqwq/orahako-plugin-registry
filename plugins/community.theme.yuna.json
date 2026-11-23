@@ -11,16 +11,16 @@
   "order": 1,
   "versions": [
     {
-      "version": "1.0.1",
-      "apiVersion": 2,
+      "version": "1.0.0",
+      "apiVersion": 1,
       "minAppVersion": "0.16.0",
       "inject": ["ui", "assets"],
       "platforms": ["web", "android"],
-      "zipUrl": "/plugins/community.theme.yuna/1.0.1.zip",
-      "sha256": "69899e08101eef0d45136a9c087dc08d7a3118d52152aa303eb3eb5f42f9cd58",
-      "size": 88971,
-      "publishedAt": "2026-11-16T05:49:36Z",
-      "changelog": "修正开关关闭态、复选/单选框、分段选择、标签页与按钮的可辨识度；开关保留滑块位置差异，开启态另带勾形标记，不单靠颜色传达状态。"
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.0.0.zip",
+      "sha256": "0a5ff336be26a9c95cfb83636fdbb0560fbc08821cf6e9eb7711072c2a170b26",
+      "size": 88911,
+      "publishedAt": "2026-11-24T02:35:00Z",
+      "changelog": "API v1 初始版本。"
     }
   ]
 }

@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url"
 import semver from "semver"
 import {
   PLATFORMS,
+  PLUGIN_API_VERSION,
   PLUGIN_ID_PATTERN,
   REPOSITORY,
   RegistryError,
@@ -17,6 +18,7 @@ import {
   isPlainObject,
   isPositiveInteger,
   isSafePackagePath,
+  expectedZipUrl,
   validatePluginDependencies,
   validateServiceNameList,
 } from "./rules.mjs"
@@ -69,7 +71,7 @@ export function serializeJson(value) {
  * metadata, and return the public schemaVersion 1 marketplace index.
  *
  * Internal registry fields are intentionally dropped here: the result only
- * contains fields declared by `packages/plugin-sdk/market.ts`.
+ * contains fields declared by `packages/core/sdk/src/market.ts`.
  */
 export function buildIndex() {
   const issues = []
@@ -260,7 +262,9 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
   if (!isNonEmptyString(version) || !semver.valid(version)) {
     issues.push(`${where}: version must be a valid SemVer`)
   }
-  if (raw.apiVersion !== 2) issues.push(`${where}: apiVersion must be 2`)
+  if (raw.apiVersion !== PLUGIN_API_VERSION) {
+    issues.push(`${where}: apiVersion must be ${PLUGIN_API_VERSION}`)
+  }
 
   let minAppVersion
   if (raw.minAppVersion !== undefined) {
@@ -336,7 +340,7 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
   } else {
     const expected =
       isNonEmptyString(pluginId) && isNonEmptyString(version)
-        ? `/plugins/${pluginId}/${version}.zip`
+        ? expectedZipUrl(pluginId, version)
         : undefined
     if (expected !== undefined && raw.zipUrl !== expected) {
       issues.push(`${where}: zipUrl must be ${expected}`)
@@ -378,7 +382,7 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
 
   return {
     version,
-    apiVersion: 2,
+    apiVersion: PLUGIN_API_VERSION,
     ...(minAppVersion !== undefined ? { minAppVersion } : {}),
     ...(nativeCapabilities !== undefined ? { nativeCapabilities } : {}),
     ...(inject !== undefined ? { inject } : {}),
