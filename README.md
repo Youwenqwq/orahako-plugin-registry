@@ -16,6 +16,7 @@ The committed `main` branch is the release channel:
 
 ```text
 plugins/<plugin-id>.json             Curated display and release metadata
+archived/<plugin-id>.json             Hidden plugin metadata excluded from the index
 bundles.json                         Curated school bundles
 dist/plugins.json                    Generated schema-v1 public index
 dist/plugins/<id>/<version>.zip      Exact installable bytes
@@ -35,6 +36,9 @@ ZIPs deliberately share one repository and branch. GitHub Raw permits browser
 cross-origin reads; GitHub Release asset downloads are not used because their
 redirect target does not provide the CORS contract required by the Web PWA and
 Capacitor WebView.
+
+Moving metadata into `archived/` hides a plugin from the generated marketplace
+index without deleting its immutable, already published ZIP assets.
 
 The registry and every official plugin currently use **API v1**. The initial
 plugin release line restarts at **1.0.0**; older EdgeOne packages and URLs are

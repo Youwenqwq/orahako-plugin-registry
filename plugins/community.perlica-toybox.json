@@ -11,6 +11,19 @@
   "order": 3,
   "versions": [
     {
+      "version": "1.0.1",
+      "apiVersion": 1,
+      "minAppVersion": "0.16.0",
+      "nativeCapabilities": ["native.geolocation@1"],
+      "inject": ["ui", "slots", "settings", "router", "i18n", "storage", "http", "native"],
+      "platforms": ["web", "android"],
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.perlica-toybox/1.0.1.zip",
+      "sha256": "969276820ceaaf25e57850eca9d953cf4f3914933f767b340e72a4ffa8f02531",
+      "size": 215751,
+      "publishedAt": "2026-11-25T14:13:24Z",
+      "changelog": "修复地图提示内容注入、跨时区时间解析、旧骑行状态恢复及寻车输入校验；完善扫码关闭与错误提示。"
+    },
+    {
       "version": "1.0.0",
       "apiVersion": 1,
       "minAppVersion": "0.16.0",

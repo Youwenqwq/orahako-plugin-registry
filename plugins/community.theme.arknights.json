@@ -11,6 +11,18 @@
   "order": 2,
   "versions": [
     {
+      "version": "1.0.1",
+      "apiVersion": 1,
+      "minAppVersion": "0.16.0",
+      "inject": ["ui"],
+      "platforms": ["web", "android"],
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.arknights/1.0.1.zip",
+      "sha256": "1b9d1fabb9224212b55bb2929673913a574bc13483ab8fb3e0bd08cb9a3bcabb",
+      "size": 8940,
+      "publishedAt": "2026-11-25T14:13:24Z",
+      "changelog": "修复中文界面移动导航样式及无效头部选择器。"
+    },
+    {
       "version": "1.0.0",
       "apiVersion": 1,
       "minAppVersion": "0.16.0",

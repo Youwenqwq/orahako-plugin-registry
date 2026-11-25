@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-24T02:35:00Z",
+  "updatedAt": "2026-11-25T14:13:24Z",
   "plugins": [
     {
       "id": "community.theme.yuna",
@@ -43,6 +43,23 @@
       ],
       "versions": [
         {
+          "version": "1.0.1",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "inject": [
+            "ui"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.arknights/1.0.1.zip",
+          "sha256": "1b9d1fabb9224212b55bb2929673913a574bc13483ab8fb3e0bd08cb9a3bcabb",
+          "size": 8940,
+          "publishedAt": "2026-11-25T14:13:24Z",
+          "changelog": "修复中文界面移动导航样式及无效头部选择器。"
+        },
+        {
           "version": "1.0.0",
           "apiVersion": 1,
           "minAppVersion": "0.16.0",
@@ -73,6 +90,33 @@
       ],
       "versions": [
         {
+          "version": "1.0.1",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "nativeCapabilities": [
+            "native.geolocation@1"
+          ],
+          "inject": [
+            "ui",
+            "slots",
+            "settings",
+            "router",
+            "i18n",
+            "storage",
+            "http",
+            "native"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.perlica-toybox/1.0.1.zip",
+          "sha256": "969276820ceaaf25e57850eca9d953cf4f3914933f767b340e72a4ffa8f02531",
+          "size": 215751,
+          "publishedAt": "2026-11-25T14:13:24Z",
+          "changelog": "修复地图提示内容注入、跨时区时间解析、旧骑行状态恢复及寻车输入校验；完善扫码关闭与错误提示。"
+        },
+        {
           "version": "1.0.0",
           "apiVersion": 1,
           "minAppVersion": "0.16.0",
@@ -102,38 +146,6 @@
       ]
     },
     {
-      "id": "zmu.provider",
-      "name": "遵义医科大学教务",
-      "summary": "验证码登录、学籍、课表、成绩与考试查询。",
-      "author": "Orahako",
-      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/zmu-provider",
-      "categories": [
-        "provider",
-        "school"
-      ],
-      "versions": [
-        {
-          "version": "1.0.0",
-          "apiVersion": 1,
-          "minAppVersion": "0.16.0",
-          "inject": [
-            "providers",
-            "session",
-            "query"
-          ],
-          "platforms": [
-            "web",
-            "android"
-          ],
-          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/zmu.provider/1.0.0.zip",
-          "sha256": "daca07042918d796c40d8d58b92df9580340cf9a81b125a884d0c00988010477",
-          "size": 7877,
-          "publishedAt": "2026-11-24T02:35:00Z",
-          "changelog": "API v1 初始版本。"
-        }
-      ]
-    },
-    {
       "id": "orahako.skbird",
       "name": "森空鸟",
       "summary": "热榜、帖子、消息与个人账户。",
@@ -143,6 +155,32 @@
         "toybox"
       ],
       "versions": [
+        {
+          "version": "1.0.1",
+          "apiVersion": 1,
+          "minAppVersion": "0.16.0",
+          "nativeCapabilities": [
+            "native.files@1"
+          ],
+          "inject": [
+            "ui",
+            "slots",
+            "router",
+            "i18n",
+            "http",
+            "storage",
+            "native"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/orahako.skbird/1.0.1.zip",
+          "sha256": "f31e547b32c018e22a4036f345844a57440da34f633209bf2ac71eecbe74fe62",
+          "size": 23324,
+          "publishedAt": "2026-11-25T14:13:24Z",
+          "changelog": "修复切换账号后恢复上一账号列表及未读数未刷新的问题。"
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
@@ -180,10 +218,18 @@
       "pluginIds": [
         "orahako.overview",
         "orahako.schedule",
+        "orahako.school-schedule",
         "orahako.grades",
         "orahako.exams",
+        "orahako.makeup-exams",
         "orahako.student-info",
-        "orahako.skbird"
+        "orahako.training-plan",
+        "orahako.evaluation",
+        "orahako.ecard",
+        "orahako.epay",
+        "orahako.labor",
+        "orahako.credits",
+        "orahako.comprehensive"
       ]
     },
     {
