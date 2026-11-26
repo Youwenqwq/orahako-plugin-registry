@@ -13,12 +13,12 @@
     {
       "version": "1.0.0",
       "apiVersion": 1,
-      "minAppVersion": "0.16.0",
+      "minAppVersion": "0.15.0",
       "inject": ["ui", "assets"],
       "platforms": ["web", "android"],
       "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.0.0.zip",
-      "sha256": "0a5ff336be26a9c95cfb83636fdbb0560fbc08821cf6e9eb7711072c2a170b26",
-      "size": 88911,
+      "sha256": "1283f34a0927fb37cc2a9735942f75ba0071c89cd0cc52204e5ca358fa45f3cf",
+      "size": 88910,
       "publishedAt": "2026-11-24T02:35:00Z",
       "changelog": "API v1 初始版本。"
     }

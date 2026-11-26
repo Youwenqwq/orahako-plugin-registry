@@ -13,13 +13,13 @@
     {
       "version": "1.0.1",
       "apiVersion": 1,
-      "minAppVersion": "0.16.0",
+      "minAppVersion": "0.15.0",
       "nativeCapabilities": ["native.files@1"],
       "inject": ["ui", "slots", "router", "i18n", "http", "storage", "native"],
       "platforms": ["web", "android"],
       "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/orahako.skbird/1.0.1.zip",
-      "sha256": "f31e547b32c018e22a4036f345844a57440da34f633209bf2ac71eecbe74fe62",
-      "size": 23324,
+      "sha256": "fc6ebdcc551961de4106a92dcc3c34697ff3d28d64965de19e3cb2797812c4b2",
+      "size": 23325,
       "publishedAt": "2026-11-25T14:13:24Z",
       "changelog": "修复切换账号后恢复上一账号列表及未读数未刷新的问题。"
     },

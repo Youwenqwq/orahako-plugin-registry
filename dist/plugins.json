@@ -15,7 +15,7 @@
         {
           "version": "1.0.0",
           "apiVersion": 1,
-          "minAppVersion": "0.16.0",
+          "minAppVersion": "0.15.0",
           "inject": [
             "ui",
             "assets"
@@ -25,8 +25,8 @@
             "android"
           ],
           "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.0.0.zip",
-          "sha256": "0a5ff336be26a9c95cfb83636fdbb0560fbc08821cf6e9eb7711072c2a170b26",
-          "size": 88911,
+          "sha256": "1283f34a0927fb37cc2a9735942f75ba0071c89cd0cc52204e5ca358fa45f3cf",
+          "size": 88910,
           "publishedAt": "2026-11-24T02:35:00Z",
           "changelog": "API v1 初始版本。"
         }
@@ -45,7 +45,7 @@
         {
           "version": "1.0.1",
           "apiVersion": 1,
-          "minAppVersion": "0.16.0",
+          "minAppVersion": "0.15.0",
           "inject": [
             "ui"
           ],
@@ -54,8 +54,8 @@
             "android"
           ],
           "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.arknights/1.0.1.zip",
-          "sha256": "1b9d1fabb9224212b55bb2929673913a574bc13483ab8fb3e0bd08cb9a3bcabb",
-          "size": 8940,
+          "sha256": "a5f7ae2d6108d0de4518f6f497d3f02540ad87d76d0a847324647fde951ae5d9",
+          "size": 8939,
           "publishedAt": "2026-11-25T14:13:24Z",
           "changelog": "修复中文界面移动导航样式及无效头部选择器。"
         },
@@ -91,7 +91,7 @@
         {
           "version": "1.0.1",
           "apiVersion": 1,
-          "minAppVersion": "0.16.0",
+          "minAppVersion": "0.15.0",
           "nativeCapabilities": [
             "native.files@1"
           ],
@@ -109,8 +109,8 @@
             "android"
           ],
           "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/orahako.skbird/1.0.1.zip",
-          "sha256": "f31e547b32c018e22a4036f345844a57440da34f633209bf2ac71eecbe74fe62",
-          "size": 23324,
+          "sha256": "fc6ebdcc551961de4106a92dcc3c34697ff3d28d64965de19e3cb2797812c4b2",
+          "size": 23325,
           "publishedAt": "2026-11-25T14:13:24Z",
           "changelog": "修复切换账号后恢复上一账号列表及未读数未刷新的问题。"
         },
