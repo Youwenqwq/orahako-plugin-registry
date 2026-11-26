@@ -6,6 +6,7 @@ import {
   RegistryError,
   SCHEMA_VERSION,
   SHA256_PATTERN,
+  TRUST_LEVELS,
   isHttpsUrl,
   isIsoTimestamp,
   isNativeCapabilityId,
@@ -24,6 +25,7 @@ const PLUGIN_FIELDS = new Set([
   "name",
   "summary",
   "author",
+  "trust",
   "homepage",
   "icon",
   "categories",
@@ -106,6 +108,9 @@ function validatePlugin(plugin, where, ids, issues) {
     if (!isNonEmptyString(plugin[field])) {
       issues.push(`${label}: ${field} must be a non-empty string`)
     }
+  }
+  if (!TRUST_LEVELS.includes(plugin.trust)) {
+    issues.push(`${label}: trust must be one of ${TRUST_LEVELS.join(", ")}`)
   }
   if (plugin.homepage !== undefined && !isHttpsUrl(plugin.homepage)) {
     issues.push(`${label}: homepage must be an absolute https URL`)

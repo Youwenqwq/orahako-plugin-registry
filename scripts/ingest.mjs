@@ -12,11 +12,12 @@ import {
   serializeJson,
 } from "./lib/registry.mjs"
 import {
+  OFFICIAL_ID_PREFIX,
+  OFFICIAL_REPOSITORY,
   PLATFORMS,
   PLUGIN_API_VERSION,
   PLUGIN_ID_PATTERN,
-  REPOSITORY,
-  TRUST,
+  TRUST_LEVELS,
   expectedZipUrl,
   isNonEmptyString,
   isPlainObject,
@@ -34,12 +35,14 @@ Options:
   --changelog <text>       Release note for this version
   --platforms <a,b>        Comma-separated platforms (default: previous release or web,android)
   --published-at <iso>     ISO-8601 UTC timestamp (default: current UTC time)
+  --trust <level>          official | community (new plugin; inferred from repository/id)
+  --repository <owner/repo> GitHub repository slug (new plugin; inferred from homepage or official repo)
   --name <text>            Display name (new plugin; default: manifest.name)
   --summary <text>         Short summary (new plugin; default: manifest.description)
   --author <text>          Author name (new plugin; default: manifest.author)
   --homepage <url>         HTTPS homepage URL (new plugin; default: manifest.homepage)
   --categories <a,b>       Comma-separated categories (new plugin; default: manifest.categories or kind)
-  --source-path <path>     Source path under plugins/ (new plugin; inferred from homepage if possible)
+  --source-path <path>     Source path inside repository (required for official; optional for community)
   --order <int>            Positive display order (new plugin; default: max order + 1)
   --dry-run                Validate and print planned changes without writing any files
   -h, --help               Show this help message
@@ -54,6 +57,8 @@ function parseCli(argv) {
       changelog: { type: "string" },
       platforms: { type: "string" },
       "published-at": { type: "string" },
+      trust: { type: "string" },
+      repository: { type: "string" },
       name: { type: "string" },
       summary: { type: "string" },
       author: { type: "string" },
@@ -91,12 +96,16 @@ function nowIsoUtc() {
   return new Date().toISOString().replace(/\.\d{3}Z$/, "Z")
 }
 
-function inferSourcePath(homepage) {
-  if (!isNonEmptyString(homepage)) return undefined
+function inferGitHubSource(homepage) {
+  if (!isNonEmptyString(homepage)) return {}
   const match = homepage.match(
-    new RegExp(`^https://github\\.com/${REPOSITORY}/tree/[^/]+/(plugins/[A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)*)/?$`)
+    /^https:\/\/github\.com\/([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+)(?:\/tree\/[^/]+\/([A-Za-z0-9._-]+(?:\/[A-Za-z0-9._-]+)*))?\/?$/
   )
-  return match?.[1]
+  if (!match) return {}
+  return {
+    repository: match[1],
+    sourcePath: match[2],
+  }
 }
 
 function nextPluginOrder() {
@@ -159,7 +168,22 @@ function buildNewPluginMetadata(manifest, release, options) {
       : isNonEmptyString(manifest.kind)
         ? [manifest.kind]
         : undefined
-  const sourcePath = options["source-path"] ?? inferSourcePath(homepage)
+  const inferred = inferGitHubSource(homepage)
+  const inferredRepo = options.repository ?? inferred.repository
+  const trust =
+    options.trust ??
+    (inferredRepo && inferredRepo !== OFFICIAL_REPOSITORY
+      ? "community"
+      : manifest.id.startsWith(OFFICIAL_ID_PREFIX) || inferredRepo === OFFICIAL_REPOSITORY
+        ? "official"
+        : "community")
+
+  if (!TRUST_LEVELS.includes(trust)) {
+    throw new Error(`--trust must be one of ${TRUST_LEVELS.join(", ")}`)
+  }
+
+  const repository = inferredRepo ?? (trust === "official" ? OFFICIAL_REPOSITORY : undefined)
+  const sourcePath = options["source-path"] ?? inferred.sourcePath
 
   let order
   if (options.order !== undefined) {
@@ -179,7 +203,10 @@ function buildNewPluginMetadata(manifest, release, options) {
   if (!Array.isArray(categories) || categories.length === 0) {
     missing.push("--categories (or manifest.categories)")
   }
-  if (!isNonEmptyString(sourcePath)) {
+  if (!isNonEmptyString(repository)) {
+    missing.push("--repository <owner/repo>")
+  }
+  if (trust === "official" && !isNonEmptyString(sourcePath)) {
     missing.push("--source-path (e.g. plugins/<dir>)")
   }
   if (missing.length > 0) {
@@ -196,9 +223,9 @@ function buildNewPluginMetadata(manifest, release, options) {
     ...(isNonEmptyString(homepage) ? { homepage } : {}),
     ...(isNonEmptyString(manifest.icon) ? { icon: manifest.icon } : {}),
     categories,
-    repository: REPOSITORY,
-    sourcePath,
-    trust: TRUST,
+    repository,
+    ...(isNonEmptyString(sourcePath) ? { sourcePath } : {}),
+    trust,
     order,
     versions: [release],
   }

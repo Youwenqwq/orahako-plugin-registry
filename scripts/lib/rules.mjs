@@ -10,8 +10,10 @@ import semver from "semver"
 
 export const SCHEMA_VERSION = 1
 export const PLUGIN_API_VERSION = 1
-export const REPOSITORY = "Youwenqwq/orahako-official-plugins"
-export const TRUST = "official"
+export const OFFICIAL_REPOSITORY = "Youwenqwq/orahako-official-plugins"
+export const TRUST_LEVELS = ["official", "community"]
+export const OFFICIAL_ID_PREFIX = "orahako."
+export const GITHUB_REPO_PATTERN = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/
 export const PLATFORMS = ["web", "android"]
 export const DISTRIBUTION_BASE_URL =
   "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist"

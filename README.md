@@ -49,7 +49,15 @@ not compatibility targets.
 
 Every `plugins/<id>.json` contains public display data, release entries, and
 registry-internal bookkeeping. The generator strips `repository`, `sourcePath`,
-`trust`, and `order` from the public index.
+and `order` from the public index while keeping `trust` (`official` or
+`community`) so clients can distinguish official and community plugins.
+
+Trust & repository rules:
+- `trust: "official"` plugins must live in `Youwenqwq/orahako-official-plugins`
+  with a `sourcePath` under `plugins/`. The `orahako.*` ID prefix is reserved
+  exclusively for `official` plugins.
+- `trust: "community"` plugins live in their author's own GitHub repository
+  (`owner/repo`); `sourcePath` is optional.
 
 Public plugin fields:
 
@@ -57,6 +65,7 @@ Public plugin fields:
 | --- | --- |
 | `id` | Lowercase DNS-like plugin ID; matches the file name |
 | `name`, `summary`, `author` | Non-empty marketplace display strings |
+| `trust` | `"official"` or `"community"` |
 | `homepage` | Optional absolute HTTPS URL |
 | `icon` | Optional safe package-relative path |
 | `categories` | Non-empty string array |

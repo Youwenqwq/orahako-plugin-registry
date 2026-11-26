@@ -7,6 +7,7 @@
       "name": "YUNA 三皮肤主题",
       "summary": "102 编辑海报、明日方舟工程终端、红魔馆典雅档案；三套均支持浅色、深色与跟随系统。",
       "author": "QS-Ling",
+      "trust": "official",
       "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/theme-yuna",
       "categories": [
         "theme"
@@ -37,6 +38,7 @@
       "name": "明日方舟 × 新粗野主义",
       "summary": "罗德岛终端视觉体系：石墨画布、2px 墨边、零圆角、硬偏移阴影、工程网格与青色信号。",
       "author": "heshuoshuo0512 / Orahako",
+      "trust": "official",
       "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/theme-arknights",
       "categories": [
         "theme"
@@ -83,6 +85,7 @@
       "name": "森空鸟",
       "summary": "热榜、帖子、消息与个人账户。",
       "author": "Orahako",
+      "trust": "official",
       "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/skbird",
       "categories": [
         "toybox"

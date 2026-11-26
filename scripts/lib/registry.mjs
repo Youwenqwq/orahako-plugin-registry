@@ -3,14 +3,16 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import semver from "semver"
 import {
+  GITHUB_REPO_PATTERN,
+  OFFICIAL_ID_PREFIX,
+  OFFICIAL_REPOSITORY,
   PLATFORMS,
   PLUGIN_API_VERSION,
   PLUGIN_ID_PATTERN,
-  REPOSITORY,
   RegistryError,
   SCHEMA_VERSION,
   SHA256_PATTERN,
-  TRUST,
+  TRUST_LEVELS,
   isHttpsUrl,
   isIsoTimestamp,
   isNativeCapabilityId,
@@ -188,17 +190,33 @@ function validatePluginMetadata(raw, fileName, issues) {
   } else if (raw.categories.some((category) => !isNonEmptyString(category))) {
     issues.push(`${where}: categories must contain non-empty strings`)
   }
-  if (raw.repository !== REPOSITORY) {
-    issues.push(`${where}: repository must be "${REPOSITORY}"`)
+  const validTrust = TRUST_LEVELS.includes(raw.trust)
+  if (!validTrust) {
+    issues.push(`${where}: trust must be one of ${TRUST_LEVELS.join(", ")}`)
   }
-  if (
-    !isNonEmptyString(raw.sourcePath) ||
-    !isSafePackagePath(raw.sourcePath) ||
-    !raw.sourcePath.startsWith("plugins/")
-  ) {
-    issues.push(`${where}: sourcePath must be a safe path under plugins/`)
+  if (isNonEmptyString(id) && id.startsWith(OFFICIAL_ID_PREFIX) && raw.trust !== "official") {
+    issues.push(`${where}: "${OFFICIAL_ID_PREFIX}*" plugin IDs are reserved for official plugins`)
   }
-  if (raw.trust !== TRUST) issues.push(`${where}: trust must be "${TRUST}"`)
+
+  if (raw.trust === "official") {
+    if (raw.repository !== OFFICIAL_REPOSITORY) {
+      issues.push(`${where}: official plugin repository must be "${OFFICIAL_REPOSITORY}"`)
+    }
+    if (
+      !isNonEmptyString(raw.sourcePath) ||
+      !isSafePackagePath(raw.sourcePath) ||
+      !raw.sourcePath.startsWith("plugins/")
+    ) {
+      issues.push(`${where}: official plugin sourcePath must be a safe path under plugins/`)
+    }
+  } else if (raw.trust === "community") {
+    if (!isNonEmptyString(raw.repository) || !GITHUB_REPO_PATTERN.test(raw.repository)) {
+      issues.push(`${where}: community plugin repository must be a GitHub "owner/repo" slug`)
+    }
+    if (raw.sourcePath !== undefined && !isSafePackagePath(raw.sourcePath)) {
+      issues.push(`${where}: sourcePath must be a safe package-relative path when present`)
+    }
+  }
   if (!isPositiveInteger(raw.order)) issues.push(`${where}: order must be a positive integer`)
 
   if (!Array.isArray(raw.versions) || raw.versions.length === 0) {
@@ -240,6 +258,7 @@ function validatePluginMetadata(raw, fileName, issues) {
     name: raw.name,
     summary: raw.summary,
     author: raw.author,
+    trust: raw.trust,
     ...(raw.homepage !== undefined ? { homepage: raw.homepage } : {}),
     ...(raw.icon !== undefined ? { icon: raw.icon } : {}),
     categories: [...raw.categories],
