@@ -1,0 +1,134 @@
+name: Ingest Plugin Release
+
+# Triggered automatically by Youwenqwq/orahako-official-plugins on tag release,
+# or manually via workflow_dispatch. Downloads the built ZIP, verifies SHA-256,
+# runs `pnpm run ingest` + `pnpm run validate`, and opens a reviewed PR.
+on:
+  repository_dispatch:
+    types:
+      - plugin-release
+  workflow_dispatch:
+    inputs:
+      zip_url:
+        description: "Direct HTTPS URL to the built plugin ZIP"
+        required: true
+        type: string
+      source_path:
+        description: "Source directory in orahako-official-plugins (e.g. plugins/shell-win98)"
+        required: false
+        default: ""
+        type: string
+      sha256:
+        description: "Expected SHA-256 hex digest (optional for manual runs)"
+        required: false
+        default: ""
+        type: string
+      changelog:
+        description: "Optional changelog note for this version"
+        required: false
+        default: ""
+        type: string
+      platforms:
+        description: "Optional comma-separated platforms (e.g. web or web,android)"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ingest-${{ github.event.client_payload.tag || inputs.zip_url }}
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    name: Ingest ZIP and open PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout registry
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Download and verify plugin ZIP
+        id: download
+        env:
+          ZIP_URL: ${{ github.event.client_payload.zip_url || inputs.zip_url }}
+          EXPECTED_SHA256: ${{ github.event.client_payload.sha256 || inputs.sha256 }}
+        run: |
+          set -euo pipefail
+          TMP_ZIP="/tmp/plugin-release.zip"
+          curl -fsSL --retry 3 --retry-delay 2 "$ZIP_URL" -o "$TMP_ZIP"
+          ACTUAL_SHA256=$(sha256sum "$TMP_ZIP" | awk '{print $1}')
+          SIZE=$(wc -c < "$TMP_ZIP" | tr -d ' ')
+
+          if [ -n "$EXPECTED_SHA256" ] && [ "$ACTUAL_SHA256" != "$EXPECTED_SHA256" ]; then
+            echo "::error::SHA-256 mismatch: expected ${EXPECTED_SHA256}, got ${ACTUAL_SHA256}"
+            exit 1
+          fi
+
+          META=$(node -e '
+            import("node:fs").then(async ({ readFileSync }) => {
+              const { unzipSync, strFromU8 } = await import("fflate")
+              const files = unzipSync(readFileSync("/tmp/plugin-release.zip"))
+              const manifest = JSON.parse(strFromU8(files["manifest.json"]))
+              console.log(JSON.stringify({ id: manifest.id, version: manifest.version }))
+            })
+          ')
+          PLUGIN_ID=$(node -e 'console.log(JSON.parse(process.argv[1]).id)' "$META")
+          VERSION=$(node -e 'console.log(JSON.parse(process.argv[1]).version)' "$META")
+
+          echo "zip_path=${TMP_ZIP}" >> "$GITHUB_OUTPUT"
+          echo "sha256=${ACTUAL_SHA256}" >> "$GITHUB_OUTPUT"
+          echo "size=${SIZE}" >> "$GITHUB_OUTPUT"
+          echo "plugin_id=${PLUGIN_ID}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Ingest plugin into registry and validate
+        env:
+          ZIP_PATH: ${{ steps.download.outputs.zip_path }}
+          SOURCE_PATH: ${{ github.event.client_payload.source_path || inputs.source_path }}
+          CHANGELOG: ${{ github.event.client_payload.changelog || inputs.changelog }}
+          PLATFORMS: ${{ github.event.client_payload.platforms || inputs.platforms }}
+        run: |
+          set -euo pipefail
+          ARGS=("$ZIP_PATH")
+          if [ -n "$SOURCE_PATH" ]; then
+            ARGS+=(--source-path "$SOURCE_PATH")
+          fi
+          if [ -n "$CHANGELOG" ]; then
+            ARGS+=(--changelog "$CHANGELOG")
+          fi
+          if [ -n "$PLATFORMS" ]; then
+            ARGS+=(--platforms "$PLATFORMS")
+          fi
+          pnpm run ingest "${ARGS[@]}"
+          pnpm run validate
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/${{ steps.download.outputs.plugin_id }}-${{ steps.download.outputs.version }}
+          delete-branch: true
+          commit-message: "release: ${{ steps.download.outputs.plugin_id }}@${{ steps.download.outputs.version }}"
+          title: "release: ${{ steps.download.outputs.plugin_id }}@${{ steps.download.outputs.version }}"
+          body: |
+            Automated registry ingest for `${{ steps.download.outputs.plugin_id }}@${{ steps.download.outputs.version }}`.
+
+            - **Source ZIP**: ${{ github.event.client_payload.zip_url || inputs.zip_url }}
+            - **Size**: `${{ steps.download.outputs.size }}` bytes
+            - **SHA-256**: `${{ steps.download.outputs.sha256 }}`
+            - **Validation**: `pnpm run validate` passed
