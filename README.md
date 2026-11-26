@@ -21,6 +21,7 @@ bundles.json                         Curated school bundles
 dist/plugins.json                    Generated schema-v1 public index
 dist/plugins/<id>/<version>.zip      Exact installable bytes
 scripts/generate.mjs                 Regenerate dist/plugins.json offline
+scripts/ingest.mjs                   Ingest a built ZIP and update metadata/index
 scripts/validate-artifacts.mjs       Validate every committed ZIP offline
 ```
 
@@ -84,15 +85,28 @@ entry/style/icon presence, API version, plugin identity, size, and hash.
 ## Adding or updating a plugin
 
 1. Build the plugin in `orahako-official-plugins`; its packer writes
-   `artifacts/<id>-<version>.zip` and prints the size and SHA-256.
-2. Copy that exact file to this repository as
-   `dist/plugins/<id>/<version>.zip`. Do not rebuild it during registry CI.
-3. Add or update `plugins/<id>.json`. For a new plugin, set `repository` to
-   `Youwenqwq/orahako-official-plugins`, `sourcePath` to its source directory,
-   `trust` to `official`, and a unique positive `order`.
-4. Run `pnpm run generate` and `pnpm run validate`. Commit the source metadata,
-   generated index, and versioned ZIP together.
-5. Merge to `main`. GitHub Raw then serves the new index and assets directly.
+   `artifacts/<id>-<version>.zip`.
+2. In this repository, run `pnpm run ingest` with the built ZIP:
+
+   ```bash
+   # Updating an existing plugin
+   pnpm run ingest ../orahako-official-plugins/artifacts/<id>-<version>.zip \
+     --changelog "Release note"
+
+   # Adding a new plugin (overrides optional when present in manifest.json)
+   pnpm run ingest ../orahako-official-plugins/artifacts/<id>-<version>.zip \
+     --source-path plugins/<dir> \
+     --changelog "API v1 初始版本。"
+   ```
+
+   The command inspects the archive, copies the exact bytes to
+   `dist/plugins/<id>/<version>.zip`, creates or updates `plugins/<id>.json`
+   with the matching `apiVersion`, `zipUrl`, `sha256`, `size`, `publishedAt`,
+   and manifest dependency fields, and regenerates `dist/plugins.json`. Pass
+   `--dry-run` to preview changes without writing files.
+3. Run `pnpm run validate` to verify every committed archive offline, then
+   commit the source metadata, generated index, and versioned ZIP together.
+4. Merge to `main`. GitHub Raw then serves the new index and assets directly.
 
 A published `<id>@<version>` is immutable: never replace its ZIP or edit its
 URL, hash, size, or publication timestamp. Bump the plugin version and add a new
@@ -105,8 +119,9 @@ Requires Node.js 20+ and pnpm:
 
 ```bash
 pnpm install
-pnpm run generate  # validate metadata and write dist/plugins.json
-pnpm run validate  # verify committed ZIPs without network access
+pnpm run ingest <path/to/plugin.zip> [--changelog "..."]  # ingest ZIP, update metadata & index
+pnpm run generate                                         # validate metadata and write dist/plugins.json
+pnpm run validate                                         # verify committed ZIPs without network access
 ```
 
 Generation is deterministic: plugin files are read in file-name order, sorted

@@ -9,6 +9,25 @@ const MAX_FILES = 512
 const MAX_MANIFEST_BYTES = 64 * 1024
 
 /**
+ * Inspect a plugin archive: check size limits, compute SHA-256, extract files,
+ * and parse `manifest.json`.
+ */
+export function inspectArchive(bytes, label = "archive") {
+  if (bytes.byteLength > MAX_ARCHIVE_BYTES) {
+    throw new Error(`${label}: archive exceeds ${MAX_ARCHIVE_BYTES} bytes`)
+  }
+  const size = bytes.byteLength
+  const sha256 = crypto.createHash("sha256").update(bytes).digest("hex")
+  const files = extractArchive(bytes, label)
+  const manifestFile = files.get("manifest.json")
+  if (manifestFile === undefined) {
+    throw new Error(`${label}: archive is missing manifest.json`)
+  }
+  const manifest = parseManifest(manifestFile, label)
+  return { manifest, files, sha256, size }
+}
+
+/**
  * Verify a committed plugin archive against its curated release metadata.
  *
  * Mirrors the client installer checks: exact size and SHA-256, safe archive
@@ -18,27 +37,15 @@ const MAX_MANIFEST_BYTES = 64 * 1024
  */
 export function verifyArchive(bytes, plugin, release) {
   const label = `${plugin.id}@${release.version}`
+  const { manifest, files, sha256, size } = inspectArchive(bytes, label)
 
-  if (bytes.byteLength > MAX_ARCHIVE_BYTES) {
-    throw new Error(`${label}: archive exceeds ${MAX_ARCHIVE_BYTES} bytes`)
+  if (size !== release.size) {
+    throw new Error(`${label}: size mismatch (registry ${release.size}, downloaded ${size})`)
   }
-  if (bytes.byteLength !== release.size) {
-    throw new Error(
-      `${label}: size mismatch (registry ${release.size}, downloaded ${bytes.byteLength})`
-    )
-  }
-
-  const digest = crypto.createHash("sha256").update(bytes).digest("hex")
-  if (digest !== release.sha256) {
-    throw new Error(`${label}: sha256 mismatch (registry ${release.sha256}, downloaded ${digest})`)
+  if (sha256 !== release.sha256) {
+    throw new Error(`${label}: sha256 mismatch (registry ${release.sha256}, downloaded ${sha256})`)
   }
 
-  const files = extractArchive(bytes, label)
-  const manifestFile = files.get("manifest.json")
-  if (manifestFile === undefined) {
-    throw new Error(`${label}: archive is missing manifest.json`)
-  }
-  const manifest = parseManifest(manifestFile, label)
   verifyManifest(manifest, plugin, release, files, label)
 }
 
