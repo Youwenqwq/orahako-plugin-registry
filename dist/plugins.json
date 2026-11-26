@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-25T14:13:24Z",
+  "updatedAt": "2026-11-26T22:09:35Z",
   "plugins": [
     {
       "id": "community.theme.yuna",
@@ -142,6 +142,40 @@
           "size": 22938,
           "publishedAt": "2026-11-24T02:35:00Z",
           "changelog": "API v1 初始版本。"
+        }
+      ]
+    },
+    {
+      "id": "orahako.shell.win98",
+      "name": "Windows 98 桌面",
+      "summary": "经典 Windows 98 风格多窗口 Web 桌面环境，支持自由拖拽、八向缩放、平铺与层叠、开始菜单、任务栏、内置资源管理器与显示属性（壁纸与配色方案）。",
+      "author": "Youwenqwq",
+      "trust": "official",
+      "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/shell-win98",
+      "categories": [
+        "appearance"
+      ],
+      "versions": [
+        {
+          "version": "1.0.0",
+          "apiVersion": 1,
+          "inject": [
+            "ui",
+            "slots",
+            "router",
+            "navigation",
+            "i18n",
+            "storage",
+            "assets"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/orahako.shell.win98/1.0.0.zip",
+          "sha256": "1907a7c1c65ffdefcc9e62bb566c3ce3aa8e6e1abd5b4a811a28713f93612115",
+          "size": 39729,
+          "publishedAt": "2026-11-26T22:09:35Z"
         }
       ]
     }
