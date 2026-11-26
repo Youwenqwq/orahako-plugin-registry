@@ -4,7 +4,7 @@ import semver from "semver"
  * Shared schema constants and predicates for the Orahako plugin registry.
  *
  * The public index shape mirrors `packages/core/sdk/src/market.ts` in
- * Youwenqwq/ysu-client. Package path rules mirror the client kernel so
+ * Youwenqwq/orahako. Package path rules mirror the client kernel so
  * archives accepted here are also accepted by the installer.
  */
 
