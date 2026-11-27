@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-27T14:37:53Z",
+  "updatedAt": "2026-11-27T14:42:41Z",
   "plugins": [
     {
       "id": "community.theme.yuna",
@@ -13,6 +13,23 @@
         "theme"
       ],
       "versions": [
+        {
+          "version": "1.2.2",
+          "apiVersion": 1,
+          "inject": [
+            "ui",
+            "assets"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.2.2.zip",
+          "sha256": "ebe64642dad4a1dd1a139794af43719eb2cfcfb2a9ce8bec519f37dab771951b",
+          "size": 92538,
+          "publishedAt": "2026-11-27T14:42:41Z",
+          "changelog": "调亮红魔馆与红魔馆 2.0 暗色酒红底色与卡片层级，为浅色与暗色背景统一补充固定视口线性+径向氛围渐变，避免暗色过黑或滚动后看不出渐变。"
+        },
         {
           "version": "1.2.1",
           "apiVersion": 1,
