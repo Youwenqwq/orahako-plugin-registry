@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-27T13:17:28Z",
+  "updatedAt": "2026-11-27T13:35:23Z",
   "plugins": [
     {
       "id": "community.theme.yuna",
-      "name": "YUNA 三皮肤主题",
-      "summary": "102 编辑海报、明日方舟工程终端、红魔馆典雅档案；三套均支持浅色、深色与跟随系统。",
+      "name": "YUNA 四皮肤主题",
+      "summary": "102 编辑海报、明日方舟工程终端、红魔馆典雅档案与红魔馆 2.0 哥特礼堂；遵循 YUNA 移动端规范，均支持浅色、深色与跟随系统。",
       "author": "QS-Ling",
       "trust": "official",
       "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/theme-yuna",
@@ -13,6 +13,23 @@
         "theme"
       ],
       "versions": [
+        {
+          "version": "1.2.0",
+          "apiVersion": 1,
+          "inject": [
+            "ui",
+            "assets"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.2.0.zip",
+          "sha256": "5f55a5e1a393adc49889dc66350a583a51f6269b4e0964e7ade607dad2847547",
+          "size": 92245,
+          "publishedAt": "2026-11-27T13:35:23Z",
+          "changelog": "按 YUNA 移动端设计规范（#mobile）重新设计四皮肤包：强化无 hover 静态三色分离（102 玫粉/蓝紫/底边类别条、明日方舟 2px 顶部战术四色循环条与同色图标、红魔馆古金/夜间微光、红魔馆 2.0 月光银图标刻度与猩红火漆），补充 @media (hover: hover) 悬停隔离与 :active 按压反馈、表单 >= 16px 防放大、微文案 >= 11px、44px 触控热区、dvh/safe-area 与窄屏边框阴影收敛。"
+        },
         {
           "version": "1.1.0",
           "apiVersion": 1,
