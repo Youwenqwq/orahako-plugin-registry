@@ -1,0 +1,37 @@
+{
+  "id": "community.campus-charge",
+  "name": "校园充电",
+  "summary": "仅限东区：个人 Token 直连查询东区 A01–A20 充电桩空闲端口，支持常用收藏、本地端口备注与完整 Token 获取引导。",
+  "author": "Orahako Community",
+  "homepage": "https://github.com/Youwenqwq/orahako-official-plugins/tree/main/plugins/campus-charge",
+  "categories": [
+    "campus"
+  ],
+  "repository": "Youwenqwq/orahako-official-plugins",
+  "sourcePath": "plugins/campus-charge",
+  "trust": "official",
+  "order": 7,
+  "versions": [
+    {
+      "version": "1.0.0",
+      "apiVersion": 1,
+      "inject": [
+        "ui",
+        "slots",
+        "router",
+        "i18n",
+        "http",
+        "storage"
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ],
+      "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.campus-charge/1.0.0.zip",
+      "sha256": "98e6d04c24e25bf46bdb90adb19a168ace7ac98ac3ebad2c8de1c071c5f00248",
+      "size": 19333,
+      "publishedAt": "2026-11-27T13:00:29Z",
+      "changelog": "API v1 初始版本：个人 jwt-token 直连查询东区 A01–A20 空闲端口（仅限东区），支持常用收藏、本地端口好坏备注与完整微信 vConsole 获取引导。"
+    }
+  ]
+}
