@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-26T22:09:35Z",
+  "updatedAt": "2026-11-27T11:33:02Z",
   "plugins": [
     {
       "id": "community.theme.yuna",
@@ -13,6 +13,24 @@
         "theme"
       ],
       "versions": [
+        {
+          "version": "1.1.0",
+          "apiVersion": 1,
+          "minAppVersion": "0.15.0",
+          "inject": [
+            "ui",
+            "assets"
+          ],
+          "platforms": [
+            "web",
+            "android"
+          ],
+          "zipUrl": "https://raw.githubusercontent.com/Youwenqwq/orahako-plugin-registry/main/dist/plugins/community.theme.yuna/1.1.0.zip",
+          "sha256": "149d3171ddc0eec5cc7e6ecd72512ef8d754754e6b1206c42539458249611db0",
+          "size": 90055,
+          "publishedAt": "2026-11-27T11:33:02Z",
+          "changelog": "同步 2026-11-27 YUNA 前端设计规范（更新明日方舟深色冷钢蓝黑与红魔馆古金辅色），并新增红魔馆 2.0 皮肤。"
+        },
         {
           "version": "1.0.0",
           "apiVersion": 1,
