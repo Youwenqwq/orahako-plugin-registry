@@ -11,6 +11,7 @@ const IMMUTABLE_RELEASE_FIELDS = [
   "apiVersion",
   "minAppVersion",
   "platforms",
+  "formFactors",
   "nativeCapabilities",
   "inject",
   "provides",
