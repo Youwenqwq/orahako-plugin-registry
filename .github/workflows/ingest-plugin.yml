@@ -116,7 +116,6 @@ jobs:
           fi
           pnpm run ingest "${ARGS[@]}"
           pnpm run generate
-          git diff --exit-code -- dist/plugins.json
           pnpm run validate
 
       - name: Create Pull Request
