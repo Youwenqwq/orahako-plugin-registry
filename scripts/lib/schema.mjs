@@ -1,5 +1,6 @@
 import semver from "semver"
 import {
+  FORM_FACTORS,
   PLATFORMS,
   PLUGIN_API_VERSION,
   PLUGIN_ID_PATTERN,
@@ -40,6 +41,7 @@ const RELEASE_FIELDS = new Set([
   "provides",
   "requires",
   "platforms",
+  "formFactors",
   "zipUrl",
   "sha256",
   "size",
@@ -187,6 +189,16 @@ function validateRelease(release, where, pluginId, versions, issues) {
     new Set(release.platforms).size !== release.platforms.length
   ) {
     issues.push(`${where}: platforms must be unique values from ${PLATFORMS.join(", ")}`)
+  }
+  if (release.formFactors !== undefined) {
+    if (!Array.isArray(release.formFactors) || release.formFactors.length === 0) {
+      issues.push(`${where}: formFactors must be a non-empty array when present`)
+    } else if (
+      release.formFactors.some((factor) => !FORM_FACTORS.includes(factor)) ||
+      new Set(release.formFactors).size !== release.formFactors.length
+    ) {
+      issues.push(`${where}: formFactors must be unique values from ${FORM_FACTORS.join(", ")}`)
+    }
   }
   if (!isNonEmptyString(release.zipUrl) || !isHttpsUrl(release.zipUrl)) {
     issues.push(`${where}: zipUrl must be an absolute https URL`)

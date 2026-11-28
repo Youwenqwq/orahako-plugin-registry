@@ -146,6 +146,9 @@ function buildReleaseEntry(manifest, { sha256, size, platforms, publishedAt, cha
     release.requires = { ...manifest.requires }
   }
   release.platforms = platforms
+  if (Array.isArray(manifest.formFactors) && manifest.formFactors.length > 0) {
+    release.formFactors = [...manifest.formFactors]
+  }
   release.zipUrl = expectedZipUrl(manifest.id, manifest.version)
   release.sha256 = sha256
   release.size = size

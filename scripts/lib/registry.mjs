@@ -3,6 +3,7 @@ import path from "node:path"
 import { fileURLToPath } from "node:url"
 import semver from "semver"
 import {
+  FORM_FACTORS,
   GITHUB_REPO_PATTERN,
   OFFICIAL_ID_PREFIX,
   OFFICIAL_REPOSITORY,
@@ -55,6 +56,7 @@ const RELEASE_FIELDS = new Set([
   "provides",
   "requires",
   "platforms",
+  "formFactors",
   "zipUrl",
   "sha256",
   "size",
@@ -353,6 +355,28 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
     if (valid) platforms = [...raw.platforms]
   }
 
+  let formFactors
+  if (raw.formFactors !== undefined) {
+    if (!Array.isArray(raw.formFactors) || raw.formFactors.length === 0) {
+      issues.push(`${where}: formFactors must be a non-empty array when present`)
+    } else {
+      const seen = new Set()
+      let valid = true
+      for (const factor of raw.formFactors) {
+        if (!FORM_FACTORS.includes(factor)) {
+          issues.push(`${where}: unsupported formFactor "${factor}"`)
+          valid = false
+        } else if (seen.has(factor)) {
+          issues.push(`${where}: duplicate formFactor "${factor}"`)
+          valid = false
+        } else {
+          seen.add(factor)
+        }
+      }
+      if (valid) formFactors = [...raw.formFactors]
+    }
+  }
+
   let zipUrl
   if (!isNonEmptyString(raw.zipUrl)) {
     issues.push(`${where}: zipUrl must be a non-empty string`)
@@ -408,6 +432,7 @@ function validateReleaseMetadata(raw, pluginId, where, issues) {
     ...(provides !== undefined ? { provides } : {}),
     ...(requires !== undefined ? { requires } : {}),
     platforms,
+    ...(formFactors !== undefined ? { formFactors } : {}),
     zipUrl,
     sha256,
     size,
