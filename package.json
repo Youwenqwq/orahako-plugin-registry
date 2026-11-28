@@ -12,7 +12,8 @@
   "scripts": {
     "generate": "node scripts/generate.mjs",
     "ingest": "node scripts/ingest.mjs",
-    "validate": "node scripts/validate-artifacts.mjs"
+    "validate": "node scripts/validate-artifacts.mjs",
+    "check:immutable": "node scripts/check-immutability.mjs"
   },
   "dependencies": {
     "fflate": "^0.8.3",

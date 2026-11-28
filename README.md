@@ -1,8 +1,8 @@
 # Orahako plugin registry
 
 Curated metadata and public distribution bytes for the official Orahako plugin
-marketplace. The application reads this repository directly through GitHub Raw;
-no EdgeOne function, website snapshot, or secondary CDN is involved.
+marketplace. Clients read this repository through jsDelivr CDN with automatic
+fallback to GitHub Raw; no EdgeOne function or website snapshot is involved.
 
 Plugin source and build automation live in
 [`Youwenqwq/orahako-official-plugins`](https://github.com/Youwenqwq/orahako-official-plugins).
@@ -93,9 +93,22 @@ entry/style/icon presence, API version, plugin identity, size, and hash.
 
 ## Adding or updating a plugin
 
-1. Build the plugin in `orahako-official-plugins`; its packer writes
-   `artifacts/<id>-<version>.zip`.
-2. In this repository, run `pnpm run ingest` with the built ZIP:
+> **Direct pushes to `main` are prohibited.** All plugin additions and updates
+> must go through a Pull Request validated by CI.
+
+### Official & collaborator plugins (`orahako-official-plugins`)
+
+1. Bump the plugin version in `Youwenqwq/orahako-official-plugins` and push a
+   matching tag `<plugin-id>@<version>`.
+2. `release-plugin.yml` tests, packs, publishes a GitHub Release, and dispatches
+   `ingest-plugin.yml` here to open a reviewed Pull Request automatically.
+3. Review and merge the PR into `main`. `registry.yml` automatically purges the
+   jsDelivr cache for `dist/plugins.json` after merge.
+
+### Manual / community Pull Requests
+
+1. Create a feature branch from `main` (never commit directly to `main`).
+2. Run `pnpm run ingest` with the built ZIP:
 
    ```bash
    # Updating an existing plugin
@@ -113,14 +126,13 @@ entry/style/icon presence, API version, plugin identity, size, and hash.
    with the matching `apiVersion`, `zipUrl`, `sha256`, `size`, `publishedAt`,
    and manifest dependency fields, and regenerates `dist/plugins.json`. Pass
    `--dry-run` to preview changes without writing files.
-3. Run `pnpm run validate` to verify every committed archive offline, then
-   commit the source metadata, generated index, and versioned ZIP together.
-4. Merge to `main`. GitHub Raw then serves the new index and assets directly.
+3. Run `pnpm run validate` and `pnpm run check:immutable`, then open a Pull
+   Request targeting `main`.
 
 A published `<id>@<version>` is immutable: never replace its ZIP or edit its
-URL, hash, size, or publication timestamp. Bump the plugin version and add a new
-path for changed code. The API-v1 restart uses a new GitHub URL namespace, so it
-does not overwrite the former EdgeOne assets.
+URL, hash, size, `minAppVersion`, or publication timestamp. CI enforces
+immutability on every PR. Bump the plugin version and add a new path for
+changed code.
 
 ## Commands
 

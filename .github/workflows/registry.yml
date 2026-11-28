@@ -2,6 +2,8 @@ name: Registry
 
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 permissions:
@@ -17,6 +19,8 @@ jobs:
     steps:
       - name: Checkout metadata
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -38,6 +42,10 @@ jobs:
       - name: Validate committed artifacts
         run: pnpm run validate
 
+      - name: Verify published releases remain immutable
+        if: github.event_name == 'pull_request'
+        run: pnpm run check:immutable "origin/${{ github.base_ref }}"
+
       - name: Upload plugin index
         uses: actions/upload-artifact@v7
         with:
@@ -45,3 +53,13 @@ jobs:
           path: dist/plugins.json
           if-no-files-found: error
           retention-days: 14
+
+  purge-cdn:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Purge jsDelivr cache for plugin index
+        run: |
+          curl -fsSL "https://purge.jsdelivr.net/gh/${{ github.repository }}@main/dist/plugins.json" \
+            || echo "::warning::jsDelivr cache purge failed; CDN will refresh on its normal TTL"
